@@ -1,17 +1,26 @@
-import { trpc } from "@/trpc/server";
-import React from 'react';
-import { PageClient } from "./client";
+import { HomeView } from "@/modules/Home/ui/views/home-view";
+import { HydrateClient , trpc } from "@/trpc/server";
 
-const Home = async () => {
+export const dynamic = "force-dynamic";
 
-void trpc.hello.prefetch({ text : "Varun joshi" });
+interface PageProps { 
+  searchParams : Promise<{categoryId? : string}>
+}
 
+const Page = async ({searchParams} : PageProps)  =>  {
+
+const { categoryId } = await searchParams;
+
+  void  trpc.categories.getMany.prefetch();
+ 
   return (
     <div>
-      <PageClient/>
+      <HydrateClient>
+        <HomeView categoryId={categoryId}/>
+      </HydrateClient>
     </div>
-  )
+  ) 
 
 };
 
-export default Home;
+export default Page;

@@ -1,21 +1,8 @@
-import { z } from 'zod';
-import { baseProcedure, createTRPCRouter } from '../init';
-import { auth } from '@clerk/nextjs/server';
-export const appRouter = createTRPCRouter({
-  hello: baseProcedure
-    .input(
-      z.object({
-        text: z.string(),
-      }),
-    )
-    .query(async (opts) => {
-      const { userId }  = await auth();
-      console.log("Hello user " , userId);
+import { categoriesRouter } from "@/modules/categories/server/procedures";
+import { createTRPCRouter } from "../init";
 
-      return {
-        greeting: `hello ${opts.input.text}`,
-      };
-    }),
+export const appRouter = createTRPCRouter({
+ categories  : categoriesRouter
 });
     
 export type AppRouter = typeof appRouter;
